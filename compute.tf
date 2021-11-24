@@ -6,14 +6,14 @@ resource "azurerm_subnet" "myterraformsubnet" {
 }
 
 resource "azurerm_public_ip" "myterraformpublicip" {
-    name                         = "myPublicIP"
-    location                     = "Canada East"
-    resource_group_name          = "TrainingResourceGroup"
-    allocation_method            = "Dynamic"
+  name                = "myPublicIP"
+  location            = "Canada East"
+  resource_group_name = "TrainingResourceGroup"
+  allocation_method   = "Dynamic"
 
-    tags = {
-        environment = "Terraform Demo"
-    }
+  tags = {
+    environment = "Terraform Demo"
+  }
 }
 
 resource "azurerm_network_interface" "myterraformnic" {
