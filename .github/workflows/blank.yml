@@ -1,36 +1,103 @@
-# This is a basic workflow to help you get started with Actions
+# This is a basic workflow to help you get started with Actions.
 
-name: CI
+name: Deploy Environment
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
+  # Triggers the workflow on push or pull request events but only for the develop branch.
+  #workflow_run:
+    #types:
+    #  - completed
+    #workflows:
+    #  - "Pre Commit Check"
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+  
+  # This workflow contains a single job called "terraformBuild"
+  terraformBuild:
+    #if: ${{ github.event.workflow_run.conclusion == 'success'}}
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
+    #runs-on: ubuntu-latest
+    env:
+      TERRAFORM_VERSION: 1.0.9 # the version of Terraform you want to install
+      TERRAFORM_PATH: . # The Path to the Terraform configuration
+      RUNNER_ADMIN_PASSWORD: ${{ secrets.RUNNER_ADMIN_PASSWORD }}
+      TF_VAR_ansible_pass: ${{ secrets.RUNNER_ADMIN_PASSWORD }}
+      TF_VAR_ansible_user: admin
+      TF_VAR_rhelpassword: ${{ secrets.RHELPASSWORD }}
+      TF_VAR_vsphere_password: ${{ secrets.VSPHERE_PASSWORD }}
+      TF_VAR_ssh_password: ${{ secrets.SSH_PASSWORD }}
+      TF_VAR_ipa_password: ${{ secrets.IPA_PASSWORD }}
+      TF_VAR_bindpw: ${{ secrets.BINDPW }}
+      ANSIBLE_FORCE_COLOR: '1'
+      TF_VAR_pdb_admin_pwd: ${{ secrets.ORACLE_PDB_ADMIN_PWD }}
+      TF_VAR_sys_pwd: ${{ secrets.ORACLE_SYS_PWD }}
+      TF_VAR_system_pwd: ${{ secrets.ORACLE_SYSTEM_PWD }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+    steps: 
+      # Validate Terraform has installed 
+      - name: Validate Terraform Install
+        id: install_validate
+        run: terraform version
+     
+      # Checkout Source code  
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v2
+        #with:
+        #  ref: 'develop'
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      # Install Git for the GitHub Terraform Backend.
+      - name: Install Git on Runner
+        id: git-install
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          if test -a /bin/git; then
+            echo "Git is Already installed on the runner"
+          else
+            echo ${{ env.RUNNER_ADMIN_PASSWORD }} | sudo -S yum -y install https://packages.endpoint.com/rhel/7/os/x86_64/endpoint-repo-1.9-1.x86_64.rpm
+            echo ${{ env.RUNNER_ADMIN_PASSWORD }} | sudo -S yum -y install git
+          fi
+
+      # Run Terraform Format
+      - name: Terraform format
+        id: format_results
+        run: echo "::set-output name=format::$(terraform fmt -diff -recursive ~/${{ env.TERRAFORM_PATH }} )" 
+
+      - name: Fail on format issue 
+        if: contains(steps.format_results.outputs.format, 'tf') #This means at least one configuration requires format changing
+        run: |
+          echo "We found 1 or more formatting issues in your Terraform code.   Please run `terraform fmt` and re-commit."
+          exit 1
+      # Run Terraform Init (to prepare for Terraform Plan)
+      - name: Terraform init
+        id: tfm_init
+        run: |
+          cd ~/actions-runner/github-backend
+          ./terraform-backend-git-linux-amd64 &
+          cd ~/${{ env.TERRAFORM_PATH }}
+          terraform init
+      # Run Terraform Validate
+      - name: Terraform validate
+        id: validate
+        run: terraform validate    
+        
+      # Execute a Terraform "plan" on the runner
+      - name: Execute a Terraform Plan
+        run: |
+          echo YOU ARE HERE: && pwd
+          cd ~/actions-runner/github-backend
+          ./terraform-backend-git-linux-amd64 &
+          cd ~/${{ env.TERRAFORM_PATH }}
+          terraform plan
+      # Execute a Terraform "apply" to the desired environment
+      - name: Deploy Infrastructure
+        run: |
+          cd ~/actions-runner/github-backend
+          ./terraform-backend-git-linux-amd64 &
+          cd ~/${{ env.TERRAFORM_PATH }}
+          terraform apply -auto-approve

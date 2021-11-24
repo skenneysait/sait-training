@@ -1,18 +1,35 @@
-module "ban-ss-server" {
-  source            = "git::https://github.com/sait-ca/terraform-vmware-modules.git//vmware-compute"
-  vmtemplate        = var.vmtemplate
-  instances         = 2
-  vmname            = "vweb170"
-  vmfolder          = var.vm_folder
-  compute_cluster   = var.compute_cluster
-  cpu_number        = 4
-  ram_size          = 8192
-  network           = var.network
-  ipv4submask       = var.ipv4submask
-  vmdns             = var.vmdns
-  dc                = var.dc
-  datastore_cluster = var.datastore_cluster
-  disk_size_gb      = var.disk_size_gb
+resource "azurerm_linux_virtual_machine" "myterraformvm" {
+  name                  = "myVM1"
+  location              = "Canada East"
+  resource_group_name   = "TrainingResourceGroup"
+  network_interface_ids = ["MyNIC"]
+  size                  = "Standard_DS1_v2"
+
+  os_disk {
+    name                 = "myOsDisk"
+    caching              = "ReadWrite"
+    storage_account_type = "Premium_LRS"
+  }
+
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "18.04-LTS"
+    version   = "latest"
+  }
+
+  computer_name                   = "myvm1"
+  disable_password_authentication = "false"
+  admin_username                  = "azureuser"
+  admin_password                  = "SuperSecretPassword55"
+
+  boot_diagnostics {
+    storage_account_uri = oneofakindstoreage31
+  }
+
+  tags = {
+    environment = "Terraform Demo"
+  }
 }
 
 ### The Ansible inventory file
@@ -21,7 +38,7 @@ resource "local_file" "AnsibleInventory" {
     {
       ansible-pass      = var.ansible_pass
       ansible-user      = var.ansible_user
-      ban-ss-server     = resource.linux.Linux-ip
+      myterraformvm     = azurerm_linux_virtual_machine.myterraformvm.Linux-ip
     }
   )
   filename = "ansible/inventory"
@@ -35,5 +52,5 @@ resource "null_resource" "run-ansible" {
   provisioner "local-exec" {
     command = "ansible-playbook -i ansible/inventory playbook.yml" 
   }
-  depends_on = [resource.ban-ss-serverr]
+  depends_on = [azurerm_linux_virtual_machine.myterraformvm]
 }
