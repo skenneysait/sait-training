@@ -24,7 +24,7 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
   admin_password                  = "SuperSecretPassword55"
 
   boot_diagnostics {
-    storage_account_uri = oneofakindstoreage31
+    storage_account_uri = "oneofakindstoreage31"
   }
 
   tags = {
