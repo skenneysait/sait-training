@@ -2,7 +2,7 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
   name                  = "myVM1"
   location              = "Canada East"
   resource_group_name   = "TrainingResourceGroup"
-  network_interface_ids = ["MyNIC"]
+  network_interface_ids = ["537dd924-559f-4a2a-9ccf-1440a5403e60"]
   size                  = "Standard_DS1_v2"
 
   os_disk {
