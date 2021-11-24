@@ -1,0 +1,12 @@
+[all:vars]
+ansible_connection=ssh
+ansible_user=${ansible-user}
+ansible_ssh_pass=${ansible-pass}
+ansible_become=yes
+ansible_become_password=${ansible-pass}
+host_key_checking=False
+
+[LINUX]
+%{ for index, ip in linux ~}
+${ip}
+%{ endfor ~}
