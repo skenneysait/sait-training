@@ -1,14 +1,14 @@
 resource "azurerm_subnet" "myterraformsubnet" {
   name                 = "mySubnet"
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.vnet.name
+  resource_group_name  = "TrainingResourceGroup"
+  virtual_network_name = "myTFVnet"
   address_prefixes     = ["10.0.2.0/24"]
 }
 
 resource "azurerm_public_ip" "myterraformpublicip" {
     name                         = "myPublicIP"
     location                     = "Canada East"
-    resource_group_name          = azurerm_resource_group.rg.name
+    resource_group_name          = "TrainingResourceGroup"
     allocation_method            = "Dynamic"
 
     tags = {
@@ -19,7 +19,7 @@ resource "azurerm_public_ip" "myterraformpublicip" {
 resource "azurerm_network_interface" "myterraformnic" {
   name                = "myNIC"
   location            = "Canada East"
-  resource_group_name = azurerm_resource_group.rg.name
+  resource_group_name = "TrainingResourceGroup"
 
   ip_configuration {
     name                          = "myNicConfiguration"
