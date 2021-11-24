@@ -50,18 +50,6 @@ jobs:
         uses: actions/checkout@v2
         #with:
         #  ref: 'develop'
-
-      # Install Git for the GitHub Terraform Backend.
-      - name: Install Git on Runner
-        id: git-install
-        run: |
-          if test -a /bin/git; then
-            echo "Git is Already installed on the runner"
-          else
-            echo ${{ env.RUNNER_ADMIN_PASSWORD }} | sudo -S yum -y install https://packages.endpoint.com/rhel/7/os/x86_64/endpoint-repo-1.9-1.x86_64.rpm
-            echo ${{ env.RUNNER_ADMIN_PASSWORD }} | sudo -S yum -y install git
-          fi
-
       # Run Terraform Format
       - name: Terraform format
         id: format_results
@@ -76,8 +64,6 @@ jobs:
       - name: Terraform init
         id: tfm_init
         run: |
-          cd ~/actions-runner/github-backend
-          ./terraform-backend-git-linux-amd64 &
           cd ~/${{ env.TERRAFORM_PATH }}
           terraform init
       # Run Terraform Validate
@@ -88,15 +74,10 @@ jobs:
       # Execute a Terraform "plan" on the runner
       - name: Execute a Terraform Plan
         run: |
-          echo YOU ARE HERE: && pwd
-          cd ~/actions-runner/github-backend
-          ./terraform-backend-git-linux-amd64 &
           cd ~/${{ env.TERRAFORM_PATH }}
           terraform plan
       # Execute a Terraform "apply" to the desired environment
       - name: Deploy Infrastructure
         run: |
-          cd ~/actions-runner/github-backend
-          ./terraform-backend-git-linux-amd64 &
           cd ~/${{ env.TERRAFORM_PATH }}
           terraform apply -auto-approve
