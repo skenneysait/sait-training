@@ -52,7 +52,7 @@ jobs:
         id: format_results
         run: |
           echo YOU ARE HERE: && pwd
-          echo "::set-output name=format::$(terraform fmt -diff" 
+          echo "::set-output name=format::$(terraform fmt -diff)" 
 
       - name: Fail on format issue 
         if: contains(steps.format_results.outputs.format, 'tf') #This means at least one configuration requires format changing
