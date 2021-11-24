@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TERRAFORM_VERSION: 1.0.9 # the version of Terraform you want to install
-      TERRAFORM_PATH: . # The Path to the Terraform configuration
+      TERRAFORM_PATH: sait-training # The Path to the Terraform configuration
       RUNNER_ADMIN_PASSWORD: ${{ secrets.RUNNER_ADMIN_PASSWORD }}
       TF_VAR_ansible_pass: ${{ secrets.RUNNER_ADMIN_PASSWORD }}
       TF_VAR_ansible_user: admin
