@@ -1,8 +1,43 @@
+resource "azurerm_subnet" "myterraformsubnet" {
+  name                 = "mySubnet"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  address_prefixes     = ["10.0.2.0/24"]
+}
+
+resource "azurerm_public_ip" "myterraformpublicip" {
+    name                         = "myPublicIP"
+    location                     = "Canada East"
+    resource_group_name          = azurerm_resource_group.rg.name
+    allocation_method            = "Dynamic"
+
+    tags = {
+        environment = "Terraform Demo"
+    }
+}
+
+resource "azurerm_network_interface" "myterraformnic" {
+  name                = "myNIC"
+  location            = "Canada East"
+  resource_group_name = azurerm_resource_group.rg.name
+
+  ip_configuration {
+    name                          = "myNicConfiguration"
+    subnet_id                     = azurerm_subnet.myterraformsubnet.id
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.myterraformpublicip.id
+  }
+
+  tags = {
+    environment = "Terraform Demo"
+  }
+}
+
 resource "azurerm_linux_virtual_machine" "myterraformvm" {
   name                  = "myVM1"
   location              = "Canada East"
   resource_group_name   = "TrainingResourceGroup"
-  network_interface_ids = ["537dd924-559f-4a2a-9ccf-1440a5403e60"]
+  network_interface_ids = [azurerm_network_interface.myterraformnic.id]
   size                  = "Standard_DS1_v2"
 
   os_disk {
@@ -20,8 +55,8 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
 
   computer_name                   = "myvm1"
   disable_password_authentication = "false"
-  admin_username                  = "azureuser"
-  admin_password                  = "SuperSecretPassword55"
+  admin_username                  = var.ansible_user
+  admin_password                  = var.ansible_pass
 
   boot_diagnostics {
     storage_account_uri = "oneofakindstoreage31"
@@ -38,7 +73,7 @@ resource "local_file" "AnsibleInventory" {
     {
       ansible-pass  = var.ansible_pass
       ansible-user  = var.ansible_user
-      myterraformvm = azurerm_linux_virtual_machine.myterraformvm.Linux-ip
+      myterraformvm = azurerm_public_ip.myterraformpublicip.id
     }
   )
   filename = "ansible/inventory"
