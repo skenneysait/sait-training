@@ -22,17 +22,15 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     env:
-      TF_VAR_ansible_pass: ${{ secrets.RUNNER_ADMIN_PASSWORD }}
-      TF_VAR_ansible_user: admin
-      TF_VAR_rhelpassword: ${{ secrets.RHELPASSWORD }}
-      TF_VAR_vsphere_password: ${{ secrets.VSPHERE_PASSWORD }}
-      TF_VAR_ssh_password: ${{ secrets.SSH_PASSWORD }}
-      TF_VAR_ipa_password: ${{ secrets.IPA_PASSWORD }}
-      TF_VAR_bindpw: ${{ secrets.BINDPW }}
+      TERRAFORM_VERSION: 1.0.9 # the version of Terraform you want to install
+      TERRAFORM_PATH: . # The Path to the Terraform configuration
+      TF_VAR_ansible_pass: ${{ secrets.ANSIBLE_PASS }}
+      TF_VAR_ansible_user: ${{ secrets.ANSIBLE_USER }}
+      TF_VAR_client_id: ${{ secrets.CLIENT_ID }}
+      TF_VAR_client_secret: ${{ secrets.CLIENT_SECRET }}
+      TF_VAR_subscription_id: ${{ secrets.SUBSCRIPTION_ID }}
+      TF_VAR_tenant_id : ${{ secrets.TENANT_ID }}
       ANSIBLE_FORCE_COLOR: '1'
-      TF_VAR_pdb_admin_pwd: ${{ secrets.ORACLE_PDB_ADMIN_PWD }}
-      TF_VAR_sys_pwd: ${{ secrets.ORACLE_SYS_PWD }}
-      TF_VAR_system_pwd: ${{ secrets.ORACLE_SYSTEM_PWD }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps: 
