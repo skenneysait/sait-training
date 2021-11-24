@@ -5,6 +5,11 @@ data "azurerm_subnet" "myterraformsubnet" {
   resource_group_name  = "TrainingResourceGroup"
 }
 
+data "azurerm_storage_account" "example" {
+  name                = "oneofakindstoreage31"
+  resource_group_name = "TrainingResourceGroup"
+}
+
 output "subnet_id" {
   value = data.azurerm_subnet.myterraformsubnet.id
 }
@@ -63,7 +68,7 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
   admin_password                  = var.ansible_pass
 
   boot_diagnostics {
-    storage_account_uri = "oneofakindstoreage31"
+    storage_account_uri = data.azurerm_storage_account.example.primary_blob_endpoint
   }
 
   tags = {
