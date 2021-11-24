@@ -53,7 +53,9 @@ jobs:
       # Run Terraform Format
       - name: Terraform format
         id: format_results
-        run: echo "::set-output name=format::$(terraform fmt -diff -recursive ~/${{ env.TERRAFORM_PATH }} )" 
+        run: |
+          echo YOU ARE HERE: && pwd
+          echo "::set-output name=format::$(terraform fmt -diff -recursive ~/${{ env.TERRAFORM_PATH }} )" 
 
       - name: Fail on format issue 
         if: contains(steps.format_results.outputs.format, 'tf') #This means at least one configuration requires format changing
