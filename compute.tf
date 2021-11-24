@@ -76,7 +76,7 @@ resource "local_file" "AnsibleInventory" {
       myterraformvm = azurerm_public_ip.myterraformpublicip.ip_address
     }
   )
-  filename = "ansible/inventory"
+  filename   = "ansible/inventory"
   depends_on = [azurerm_linux_virtual_machine.myterraformvm]
 }
 
