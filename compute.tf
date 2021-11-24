@@ -1,8 +1,12 @@
-resource "azurerm_subnet" "myterraformsubnet" {
+
+data "azurerm_subnet" "myterraformsubnet" {
   name                 = "mySubnet"
-  resource_group_name  = "TrainingResourceGroup"
   virtual_network_name = "myTFVnet"
-  address_prefixes     = ["10.0.2.0/24"]
+  resource_group_name  = "TrainingResourceGroup"
+}
+
+output "subnet_id" {
+  value = data.azurerm_subnet.myterraformsubnet.id
 }
 
 resource "azurerm_public_ip" "myterraformpublicip" {
@@ -23,7 +27,7 @@ resource "azurerm_network_interface" "myterraformnic" {
 
   ip_configuration {
     name                          = "myNicConfiguration"
-    subnet_id                     = azurerm_subnet.myterraformsubnet.id
+    subnet_id                     = data.azurerm_subnet.myterraformsubnet.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.myterraformpublicip.id
   }
