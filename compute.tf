@@ -36,9 +36,9 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
 resource "local_file" "AnsibleInventory" {
   content = templatefile("ansible/inventory.tmpl",
     {
-      ansible-pass      = var.ansible_pass
-      ansible-user      = var.ansible_user
-      myterraformvm     = azurerm_linux_virtual_machine.myterraformvm.Linux-ip
+      ansible-pass  = var.ansible_pass
+      ansible-user  = var.ansible_user
+      myterraformvm = azurerm_linux_virtual_machine.myterraformvm.Linux-ip
     }
   )
   filename = "ansible/inventory"
@@ -50,7 +50,7 @@ resource "null_resource" "run-ansible" {
     always_run = timestamp()
   }
   provisioner "local-exec" {
-    command = "ansible-playbook -i ansible/inventory ansible/playbook.yml" 
+    command = "ansible-playbook -i ansible/inventory ansible/playbook.yml"
   }
   depends_on = [azurerm_linux_virtual_machine.myterraformvm]
 }
