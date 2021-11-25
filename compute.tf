@@ -1,4 +1,3 @@
-
 data "azurerm_subnet" "myterraformsubnet" {
   name                 = "mySubnet"
   virtual_network_name = "myTFVnet"
@@ -43,7 +42,7 @@ resource "azurerm_network_interface" "myterraformnic" {
 }
 
 resource "azurerm_linux_virtual_machine" "myterraformvm" {
-  name                  = "myVM1"
+  name                  = "myVM"
   location              = "Canada East"
   resource_group_name   = "TrainingResourceGroup"
   network_interface_ids = [azurerm_network_interface.myterraformnic.id]
@@ -87,6 +86,14 @@ output "public_ip_address" {
   depends_on = [azurerm_linux_virtual_machine.myterraformvm]
 }
 
+resource "null_resource" "previous" {}
+
+resource "time_sleep" "wait_30_seconds" {
+  depends_on = [null_resource.previous]
+
+  create_duration = "45s"
+}
+
 ### The Ansible inventory file
 resource "local_file" "AnsibleInventory" {
   content = templatefile("ansible/inventory.tmpl",
@@ -94,6 +101,7 @@ resource "local_file" "AnsibleInventory" {
       ansible-pass  = var.ansible_pass
       ansible-user  = var.ansible_user
       myterraformvm = data.azurerm_public_ip.myterraformpublicip.ip_address
+      #myterraformvm = "52.229.66.235"
     }
   )
   filename   = "ansible/inventory"
@@ -108,5 +116,5 @@ resource "null_resource" "run-ansible" {
   provisioner "local-exec" {
     command = "ansible-playbook -i ansible/inventory ansible/playbook.yml"
   }
-  depends_on = [azurerm_linux_virtual_machine.myterraformvm]
+  depends_on = [azurerm_linux_virtual_machine.myterraformvm, time_sleep.wait_30_seconds]
 }
