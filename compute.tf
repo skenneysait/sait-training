@@ -25,10 +25,6 @@ resource "azurerm_public_ip" "myterraformpublicip" {
   }
 }
 
-output "public_ip" {
-  value = azurerm_public_ip.myterraformpublicip.ip_address
-}
-
 resource "azurerm_network_interface" "myterraformnic" {
   name                = "myNIC"
   location            = "Canada East"
