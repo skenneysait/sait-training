@@ -86,7 +86,6 @@ resource "local_file" "AnsibleInventory" {
     }
   )
   filename   = "ansible/inventory"
-  depends_on = [azurerm_linux_virtual_machine.myterraformvm]
 }
 
 
