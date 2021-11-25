@@ -101,7 +101,6 @@ resource "local_file" "AnsibleInventory" {
       ansible-pass  = var.ansible_pass
       ansible-user  = var.ansible_user
       myterraformvm = data.azurerm_public_ip.myterraformpublicip.ip_address
-      #myterraformvm = "52.229.66.235"
     }
   )
   filename   = "ansible/inventory"
