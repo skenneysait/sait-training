@@ -94,7 +94,7 @@ resource "null_resource" "run-ansible" {
     always_run = timestamp()
   }
   provisioner "local-exec" {
-    command = "ansible-playbook -i ansible/inventory ansible/playbook.yml"
+    command = "ansible-playbook -i ${azurerm_public_ip.myterraformpublicip.ip_address}, ansible/playbook.yml"
   }
   depends_on = [azurerm_linux_virtual_machine.myterraformvm]
 }
