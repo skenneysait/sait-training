@@ -25,6 +25,10 @@ resource "azurerm_public_ip" "myterraformpublicip" {
   }
 }
 
+output "public_ip" {
+  value = azurerm_public_ip.myterraformpublicip.ip_address
+}
+
 resource "azurerm_network_interface" "myterraformnic" {
   name                = "myNIC"
   location            = "Canada East"
@@ -76,13 +80,21 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
   }
 }
 
+data "azurerm_public_ip" "myterraformpublicip" {
+  name                = azurerm_public_ip.myterraformpublicip.name
+  resource_group_name = azurerm_virtual_machine.myterraformpublicip.resource_group_name
+}
+
+output "public_ip_address" {
+  value = data.azurerm_public_ip.myterraformpublicip.ip_address
+}
 ### The Ansible inventory file
 resource "local_file" "AnsibleInventory" {
   content = templatefile("ansible/inventory.tmpl",
     {
       ansible-pass  = var.ansible_pass
       ansible-user  = var.ansible_user
-      myterraformvm = azurerm_public_ip.myterraformpublicip.ip_address
+      myterraformvm = data.azurerm_public_ip.myterraformpublicip.ip_address
     }
   )
   filename = "ansible/inventory"
@@ -94,7 +106,7 @@ resource "null_resource" "run-ansible" {
     always_run = timestamp()
   }
   provisioner "local-exec" {
-    command = "ansible-playbook -i ${azurerm_public_ip.myterraformpublicip.ip_address}, ansible/playbook.yml"
+    command = "ansible-playbook -i ${data.azurerm_public_ip.myterraformpublicip.ip_address}, ansible/playbook.yml"
   }
   depends_on = [azurerm_linux_virtual_machine.myterraformvm]
 }

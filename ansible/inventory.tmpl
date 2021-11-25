@@ -7,4 +7,6 @@ ansible_become_password=${ansible-pass}
 host_key_checking=False
 
 [LINUX]
-${myterraformvm}
+%{ for index, ip in myterraformvm ~}
+${ip}
+%{ endfor ~}
