@@ -88,6 +88,7 @@ data "azurerm_public_ip" "myterraformpublicip" {
 output "public_ip_address" {
   value = data.azurerm_public_ip.myterraformpublicip.ip_address
 }
+
 ### The Ansible inventory file
 resource "local_file" "AnsibleInventory" {
   content = templatefile("ansible/inventory.tmpl",
@@ -97,7 +98,8 @@ resource "local_file" "AnsibleInventory" {
       myterraformvm = data.azurerm_public_ip.myterraformpublicip.ip_address
     }
   )
-  filename = "ansible/inventory"
+  filename   = "ansible/inventory"
+  depends_on = [azurerm_linux_virtual_machine.myterraformvm]
 }
 
 
