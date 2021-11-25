@@ -83,10 +83,12 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
 data "azurerm_public_ip" "myterraformpublicip" {
   name                = azurerm_public_ip.myterraformpublicip.name
   resource_group_name = "TrainingResourceGroup"
+  depends_on = [azurerm_linux_virtual_machine.myterraformvm]
 }
 
 output "public_ip_address" {
   value = data.azurerm_public_ip.myterraformpublicip.ip_address
+  depends_on = [azurerm_linux_virtual_machine.myterraformvm]
 }
 
 ### The Ansible inventory file
