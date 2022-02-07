@@ -67,7 +67,7 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
   admin_password                  = var.ansible_pass
 
   boot_diagnostics {
-    storage_account_uri = data.azurerm_storage_account.example.primary_blob_endpoint
+    storage_account_uri = data.azurerm_storage_account.myterraformstorageaccount.primary_blob_endpoint
   }
 
   tags = {
