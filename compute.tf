@@ -5,7 +5,7 @@ data "azurerm_subnet" "myterraformsubnet" {
 }
 
 data "azurerm_storage_account" "example" {
-  name                = "oneofakindstoreage31"
+  name                = "tfstorageaccount161"
   resource_group_name = "TrainingResourceGroup"
 }
 
