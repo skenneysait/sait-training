@@ -75,14 +75,14 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
   }
 }
 
-data "azurerm_public_ip" "ShawnPublicIP" {
-  name                = azurerm_public_ip.myterraformpublicip.name
+data "azurerm_public_ip" "myterraformpublicip" {
+  name                = azurerm_public_ip.ShawnPublicIP.name
   resource_group_name = "TerraformManaged"
   depends_on          = [azurerm_linux_virtual_machine.myterraformvm]
 }
 
 output "public_ip_address" {
-  value      = data.azurerm_public_ip.myterraformpublicip.ip_address
+  value      = data.azurerm_public_ip.ShawnPublicIP.ip_address
   depends_on = [azurerm_linux_virtual_machine.myterraformvm]
 }
 
@@ -100,7 +100,7 @@ resource "local_file" "AnsibleInventory" {
     {
       ansible-pass  = var.ansible_pass
       ansible-user  = var.ansible_user
-      myterraformvm = data.azurerm_public_ip.myterraformpublicip.ip_address
+      myterraformvm = data.azurerm_public_ip.ShawnPublicIP.ip_address
     }
   )
   filename   = "ansible/inventory"
