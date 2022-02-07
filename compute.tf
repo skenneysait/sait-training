@@ -12,3 +12,14 @@ data "azurerm_storage_account" "myterraformstorageaccount" {
 output "subnet_id" {
   value = data.azurerm_subnet.myterraformsubnet.id
 }
+
+resource "azurerm_public_ip" "myterraformpublicip" {
+  name                = "TF-VM2-IP"
+  location            = "Canada Central"
+  resource_group_name = "TF-ResourceGroup"
+  allocation_method   = "Dynamic"
+
+  tags = {
+    environment = "Terraform Demo"
+  }
+}
