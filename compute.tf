@@ -74,3 +74,14 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
     environment = "Terraform Demo"
   }
 }
+
+data "azurerm_public_ip" "myterraformpublicip" {
+  name                = azurerm_public_ip.myterraformpublicip.name
+  resource_group_name = "TF-ResourceGroup"
+  depends_on          = [azurerm_linux_virtual_machine.myterraformvm]
+}
+
+output "public_ip_address" {
+  value      = data.azurerm_public_ip.myterraformpublicip.ip_address
+  depends_on = [azurerm_linux_virtual_machine.myterraformvm]
+}
