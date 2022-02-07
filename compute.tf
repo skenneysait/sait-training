@@ -16,7 +16,7 @@ output "subnet_id" {
 resource "azurerm_public_ip" "myterraformpublicip" {
   name                = "ShawnPublicIP"
   location            = "Canada East"
-  resource_group_name = "TrainingResourceGroup"
+  resource_group_name = "TerraformManaged"
   allocation_method   = "Dynamic"
 
   tags = {
@@ -27,7 +27,7 @@ resource "azurerm_public_ip" "myterraformpublicip" {
 resource "azurerm_network_interface" "myterraformnic" {
   name                = "ShawnNIC"
   location            = "Canada East"
-  resource_group_name = "TrainingResourceGroup"
+  resource_group_name = "TerraformManaged"
 
   ip_configuration {
     name                          = "myNicConfiguration"
