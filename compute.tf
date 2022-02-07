@@ -1,5 +1,5 @@
 data "azurerm_subnet" "myterraformsubnet" {
-  name                 = "TF-Subnet"
-  virtual_network_name = "TF-Vnet"
+  name                 = "default"
+  virtual_network_name = "TF-ResourceGroup-vnet"
   resource_group_name  = "TF-ResourceGroup"
 }
