@@ -85,3 +85,35 @@ output "public_ip_address" {
   value      = data.azurerm_public_ip.myterraformpublicip.ip_address
   depends_on = [azurerm_linux_virtual_machine.myterraformvm]
 }
+
+resource "null_resource" "previous" {}
+
+resource "time_sleep" "wait_30_seconds" {
+  depends_on = [null_resource.previous]
+
+  create_duration = "45s"
+}
+
+### The Ansible inventory file
+resource "local_file" "AnsibleInventory" {
+  content = templatefile("ansible/inventory.tmpl",
+    {
+      ansible-pass  = var.ansible_pass
+      ansible-user  = var.ansible_user
+      myterraformvm = data.azurerm_public_ip.myterraformpublicip.ip_address
+    }
+  )
+  filename   = "ansible/inventory"
+  depends_on = [azurerm_linux_virtual_machine.myterraformvm]
+}
+
+
+resource "null_resource" "run-ansible" {
+  triggers = {
+    always_run = timestamp()
+  }
+  provisioner "local-exec" {
+    command = "ansible-playbook -i ansible/inventory ansible/playbook.yml"
+  }
+  depends_on = [azurerm_linux_virtual_machine.myterraformvm, time_sleep.wait_30_seconds]
+}
