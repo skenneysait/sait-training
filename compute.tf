@@ -107,7 +107,6 @@ resource "local_file" "AnsibleInventory" {
   depends_on = [azurerm_linux_virtual_machine.myterraformvm]
 }
 
-
 resource "null_resource" "run-ansible" {
   triggers = {
     always_run = timestamp()
