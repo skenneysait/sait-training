@@ -15,7 +15,7 @@ output "subnet_id" {
 
 resource "azurerm_public_ip" "myterraformpublicip" {
   name                = "ShawnPublicIP"
-  location            = "Canada East"
+  location            = "Canada Central"
   resource_group_name = "TerraformManaged"
   allocation_method   = "Dynamic"
 
@@ -26,7 +26,7 @@ resource "azurerm_public_ip" "myterraformpublicip" {
 
 resource "azurerm_network_interface" "myterraformnic" {
   name                = "ShawnNIC"
-  location            = "Canada East"
+  location            = "Canada Central"
   resource_group_name = "TerraformManaged"
 
   ip_configuration {
@@ -43,7 +43,7 @@ resource "azurerm_network_interface" "myterraformnic" {
 
 resource "azurerm_linux_virtual_machine" "myterraformvm" {
   name                  = "ShawnVM"
-  location              = "Canada East"
+  location              = "Canada Central"
   resource_group_name   = "TerraformManaged"
   network_interface_ids = [azurerm_network_interface.myterraformnic.id]
   size                  = "Standard_DS1_v2"
@@ -75,7 +75,7 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
   }
 }
 
-data "azurerm_public_ip" "myterraformpublicip" {
+data "azurerm_public_ip" "ShawnPublicIP" {
   name                = azurerm_public_ip.myterraformpublicip.name
   resource_group_name = "TerraformManaged"
   depends_on          = [azurerm_linux_virtual_machine.myterraformvm]
