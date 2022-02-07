@@ -1,12 +1,12 @@
 data "azurerm_subnet" "myterraformsubnet" {
   name                 = "mySubnet"
   virtual_network_name = "myTFVnet"
-  resource_group_name  = "TrainingResourceGroup"
+  resource_group_name  = "TerraformManaged"
 }
 
 data "azurerm_storage_account" "example" {
   name                = "tfstorageaccount161"
-  resource_group_name = "TrainingResourceGroup"
+  resource_group_name = "TerraformManaged"
 }
 
 output "subnet_id" {
@@ -44,7 +44,7 @@ resource "azurerm_network_interface" "myterraformnic" {
 resource "azurerm_linux_virtual_machine" "myterraformvm" {
   name                  = "ShawnVM"
   location              = "Canada East"
-  resource_group_name   = "TrainingResourceGroup"
+  resource_group_name   = "TerraformManaged"
   network_interface_ids = [azurerm_network_interface.myterraformnic.id]
   size                  = "Standard_DS1_v2"
 
@@ -77,7 +77,7 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
 
 data "azurerm_public_ip" "myterraformpublicip" {
   name                = azurerm_public_ip.myterraformpublicip.name
-  resource_group_name = "TrainingResourceGroup"
+  resource_group_name = "TerraformManaged"
   depends_on          = [azurerm_linux_virtual_machine.myterraformvm]
 }
 
