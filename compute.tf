@@ -94,17 +94,17 @@ resource "time_sleep" "wait_30_seconds" {
 }
 
 ### The Ansible inventory file
-#resource "local_file" "AnsibleInventory" {
-#  content = templatefile("ansible/inventory.tmpl",
-#    {
-#      ansible-pass  = var.ansible_pass
-#      ansible-user  = var.ansible_user
-#      myterraformvm = data.azurerm_public_ip.myterraformpublicip.ip_address
-#    }
-#  )
-#  filename   = "ansible/inventory"
-#  depends_on = [azurerm_linux_virtual_machine.myterraformvm]
-#}
+resource "local_file" "AnsibleInventory" {
+  content = templatefile("ansible/inventory.tmpl",
+    {
+      ansible-pass  = var.ansible_pass
+      ansible-user  = var.ansible_user
+      myterraformvm = data.azurerm_public_ip.myterraformpublicip.ip_address
+    }
+  )
+  filename   = "ansible/inventory"
+  depends_on = [azurerm_linux_virtual_machine.myterraformvm]
+}
 
 #resource "null_resource" "run-ansible" {
 #  triggers = {
