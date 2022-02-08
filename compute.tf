@@ -57,11 +57,15 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
   resource_group_name   = "TF-ResourceGroup"
   network_interface_ids = [azurerm_network_interface.myterraformnic.id]
   size                  = "Standard_DS1_v2"
+  computer_name                   = "TF-VM2"
+  #disable_password_authentication = "false"
+  admin_username                  = var.ansible_user
+  #admin_password                  = var.ansible_pass
 
-admin_ssh_key {
-  username = var.ansible_user
-  public_key = tls_private_key.linux_key.public_key_openssh
-}
+  admin_ssh_key {
+    username = var.ansible_user
+    public_key = tls_private_key.linux_key.public_key_openssh
+  }
   
   os_disk {
     name                 = "TF-VM2-OsDisk"
@@ -79,11 +83,6 @@ admin_ssh_key {
   depends_on = [
     tls_private_key.linux_key
   ]
-
-  computer_name                   = "TF-VM2"
-  disable_password_authentication = "false"
-  admin_username                  = var.ansible_user
-  admin_password                  = var.ansible_pass
 
   boot_diagnostics {
     storage_account_uri = data.azurerm_storage_account.myterraformstorageaccount.primary_blob_endpoint
