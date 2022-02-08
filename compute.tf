@@ -41,31 +41,31 @@ resource "azurerm_network_interface" "myterraformnic" {
   }
 }
 
-resource "tls_private_key" "linux_key" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
+#resource "tls_private_key" "linux_key" {
+#  algorithm = "RSA"
+#  rsa_bits  = 4096
+#}
 
-resource "local_file" "linuxkey" {
-  filename = "linuxkey.pem"
-  content  = tls_private_key.linux_key.private_key_pem
-}
+#resource "local_file" "linuxkey" {
+#  filename = "linuxkey.pem"
+#  content  = tls_private_key.linux_key.private_key_pem
+#}
 
 resource "azurerm_linux_virtual_machine" "myterraformvm" {
-  name                  = "TF-VM2"
-  location              = "Canada Central"
-  resource_group_name   = "TF-ResourceGroup"
-  network_interface_ids = [azurerm_network_interface.myterraformnic.id]
-  size                  = "Standard_DS1_v2"
-  computer_name         = "TF-VM2"
-  #disable_password_authentication = "false"
-  admin_username = var.ansible_user
-  #admin_password       = var.ansible_pass
+  name                            = "TF-VM2"
+  location                        = "Canada Central"
+  resource_group_name             = "TF-ResourceGroup"
+  network_interface_ids           = [azurerm_network_interface.myterraformnic.id]
+  size                            = "Standard_DS1_v2"
+  computer_name                   = "TF-VM2"
+  disable_password_authentication = "false"
+  admin_username                  = var.ansible_user
+  admin_password                  = var.ansible_pass
 
-  admin_ssh_key {
-    username   = var.ansible_user
-    public_key = tls_private_key.linux_key.public_key_openssh
-  }
+  #admin_ssh_key {
+  #  username   = var.ansible_user
+  #  public_key = tls_private_key.linux_key.public_key_openssh
+  #}
 
   os_disk {
     name                 = "TF-VM2-OsDisk"
