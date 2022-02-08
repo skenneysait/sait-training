@@ -80,9 +80,9 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
     version   = "latest"
   }
 
-  depends_on = [
-    tls_private_key.linux_key
-  ]
+  #depends_on = [
+  #  tls_private_key.linux_key
+  #]
 
   boot_diagnostics {
     storage_account_uri = data.azurerm_storage_account.myterraformstorageaccount.primary_blob_endpoint
