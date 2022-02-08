@@ -43,12 +43,12 @@ resource "azurerm_network_interface" "myterraformnic" {
 
 resource "tls_private_key" "linux_key" {
   algorithm = "RSA"
-  rsa_bits = 4096
+  rsa_bits  = 4096
 }
 
 resource "local_file" "linuxkey" {
-  filename="linuxkey.pem"
-  content=tls_private_key.linux_key.private_key_pem
+  filename = "linuxkey.pem"
+  content  = tls_private_key.linux_key.private_key_pem
 }
 
 resource "azurerm_linux_virtual_machine" "myterraformvm" {
@@ -59,14 +59,14 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
   size                  = "Standard_DS1_v2"
   computer_name         = "TF-VM2"
   #disable_password_authentication = "false"
-  admin_username        = var.ansible_user
+  admin_username = var.ansible_user
   #admin_password       = var.ansible_pass
 
   admin_ssh_key {
-    username = var.ansible_user
+    username   = var.ansible_user
     public_key = tls_private_key.linux_key.public_key_openssh
   }
-  
+
   os_disk {
     name                 = "TF-VM2-OsDisk"
     caching              = "ReadWrite"
@@ -79,7 +79,7 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
     sku       = "18.04-LTS"
     version   = "latest"
   }
-  
+
   depends_on = [
     tls_private_key.linux_key
   ]
