@@ -41,16 +41,6 @@ resource "azurerm_network_interface" "myterraformnic" {
   }
 }
 
-#resource "tls_private_key" "linux_key" {
-#  algorithm = "RSA"
-#  rsa_bits  = 4096
-#}
-
-#resource "local_file" "linuxkey" {
-#  filename = "linuxkey.pem"
-#  content  = tls_private_key.linux_key.private_key_pem
-#}
-
 resource "azurerm_linux_virtual_machine" "myterraformvm" {
   name                            = "TF-VM2"
   location                        = "Canada Central"
@@ -61,11 +51,6 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
   disable_password_authentication = "false"
   admin_username                  = var.ansible_user
   admin_password                  = var.ansible_pass
-
-  #admin_ssh_key {
-  #  username   = var.ansible_user
-  #  public_key = tls_private_key.linux_key.public_key_openssh
-  #}
 
   os_disk {
     name                 = "TF-VM2-OsDisk"
@@ -79,10 +64,6 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
     sku       = "18.04-LTS"
     version   = "latest"
   }
-
-  #depends_on = [
-  #  tls_private_key.linux_key
-  #]
 
   boot_diagnostics {
     storage_account_uri = data.azurerm_storage_account.myterraformstorageaccount.primary_blob_endpoint
@@ -113,25 +94,24 @@ resource "time_sleep" "wait_30_seconds" {
 }
 
 ### The Ansible inventory file
-resource "local_file" "AnsibleInventory" {
-  content = templatefile("ansible/inventory.tmpl",
-    {
-      ansible-pass  = var.ansible_pass
-      ansible-user  = var.ansible_user
-      myterraformvm = data.azurerm_public_ip.myterraformpublicip.ip_address
-    }
-  )
-  filename   = "ansible/inventory"
-  depends_on = [azurerm_linux_virtual_machine.myterraformvm]
-}
+#resource "local_file" "AnsibleInventory" {
+#  content = templatefile("ansible/inventory.tmpl",
+#    {
+#      ansible-pass  = var.ansible_pass
+#      ansible-user  = var.ansible_user
+#      myterraformvm = data.azurerm_public_ip.myterraformpublicip.ip_address
+#    }
+#  )
+#  filename   = "ansible/inventory"
+#  depends_on = [azurerm_linux_virtual_machine.myterraformvm]
+#}
 
-
-resource "null_resource" "run-ansible" {
-  triggers = {
-    always_run = timestamp()
-  }
-  provisioner "local-exec" {
-    command = "ansible-playbook -i ansible/inventory ansible/playbook.yml"
-  }
-  depends_on = [azurerm_linux_virtual_machine.myterraformvm, time_sleep.wait_30_seconds]
-}
+#resource "null_resource" "run-ansible" {
+#  triggers = {
+#    always_run = timestamp()
+#  }
+#  provisioner "local-exec" {
+#    command = "ansible-playbook -i ansible/inventory ansible/playbook.yml"
+#  }
+#  depends_on = [azurerm_linux_virtual_machine.myterraformvm, time_sleep.wait_30_seconds]
+#}
