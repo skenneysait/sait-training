@@ -57,10 +57,10 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
   resource_group_name   = "TF-ResourceGroup"
   network_interface_ids = [azurerm_network_interface.myterraformnic.id]
   size                  = "Standard_DS1_v2"
-  computer_name                   = "TF-VM2"
+  computer_name         = "TF-VM2"
   #disable_password_authentication = "false"
-  admin_username                  = var.ansible_user
-  #admin_password                  = var.ansible_pass
+  admin_username        = var.ansible_user
+  #admin_password       = var.ansible_pass
 
   admin_ssh_key {
     username = var.ansible_user
