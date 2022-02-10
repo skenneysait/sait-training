@@ -17,7 +17,7 @@ on:
 jobs:
   
   # This workflow contains a single job called "terraformBuild"
-  terraformBuild:
+  terraformDestroy:
     #if: ${{ github.event.workflow_run.conclusion == 'success'}}
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -35,94 +35,6 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps: 
       # Validate Terraform has installed 
-      - name: Validate Terraform Install
+      - name: Terraform Destroy
         id: install_validate
-        run: terraform version
-     
-      # Checkout Source code  
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v2
-        #with:
-        #  ref: 'develop'
-
-      # Install Git for the GitHub Terraform Backend.
-      - name: Install Git on Runner
-        id: git-install
-        run: |
-          if test -a /bin/git; then
-            echo "Git is Already installed on the runner"
-          # else
-            # sudo -S yum -y install https://packages.endpoint.com/rhel/7/os/x86_64/endpoint-repo-1.9-1.x86_64.rpm
-            # sudo -S yum -y install git
-          fi
-      # Install Go for the GitHub Terraform Backend
-      - name: Install GO on Runner
-        id: golang-install
-        run: |
-          if test -a /usr/local/bin/go/bin/go; then
-            echo "GO is Already installed on the runner"
-          else
-            wget https://golang.org/dl/go1.17.1.linux-amd64.tar.gz
-            sudo -S tar -C /usr/local/bin -xzf go1.17.1.linux-amd64.tar.gz
-            echo 'export PATH=/usr/local/bin/go/bin:$PATH' >>~/.bash_profile
-            source $HOME/.bash_profile
-          fi
-      # Initialize GO binary for the GitHub Terraform Backend
-      - name: GitHub Terraform Backend
-        id: gh_tfm_remote
-        run: |
-          if test -a ~/actions-runner/github-backend/terraform-backend-git-linux-amd64; then
-            echo "Git Hub Backend program already exists on the Runner"
-            cd ~/actions-runner/github-backend/
-            ./github-backend/terraform-backend-git-linux-amd64 &
-          else
-            mkdir ~/actions-runner/github-backend && cd ~/actions-runner/github-backend
-            export GOPATH=${PWD}
-            echo $GOPATH is Go Path
-            wget https://github.com/plumber-cd/terraform-backend-git/releases/download/v0.0.16/terraform-backend-git-linux-amd64
-            chmod +x terraform-backend-git-linux-amd64
-            ./terraform-backend-git-linux-amd64 &
-          fi
-      #Add the SSH Private Key to the runner to talk to the GitHub Terraform Backend Repo
-      #This is set up from scratch each time to ensure the SSH key is valid for current execution
-      - name: Add SSH Deploy Key
-        run: |
-          rm -rf ~/.ssh/id_rsa
-          rm -rf ~/.ssh/known_hosts
-          mkdir -p ~/.ssh/
-          chmod -R 777 ~/.ssh/
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" >> ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          eval `ssh-agent -s`
-          ssh-add ~/.ssh/id_rsa
-          ssh-keyscan -H github.com  >> ~/.ssh/known_hosts
-      # Run Terraform Format
-      - name: Terraform format
-        id: format_results
-        run: |
-          echo YOU ARE HERE: && pwd
-          echo "::set-output name=format::$(terraform fmt -diff)" 
-      - name: Fail on format issue 
-        if: contains(steps.format_results.outputs.format, 'tf') #This means at least one configuration requires format changing
-        run: |
-          echo "We found 1 or more formatting issues in your Terraform code.   Please run `terraform fmt` and re-commit."
-          exit 1
-      # Run Terraform Init (to prepare for Terraform Plan)
-      - name: Terraform init
-        id: tfm_init
-        run: |
-          terraform init
-      # Run Terraform Validate
-      - name: Terraform validate
-        id: validate
-        run: terraform validate    
-        
-      # Execute a Terraform "plan" on the runner
-      - name: Execute a Terraform Plan
-        run: |
-          terraform plan
-      # Execute a Terraform "apply" to the desired environment
-      - name: Deploy Infrastructure
-        run: |
-          terraform apply -auto-approve
+        run: terraform destroy -auto-approve
