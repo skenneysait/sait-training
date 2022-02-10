@@ -100,7 +100,7 @@ jobs:
           eval `ssh-agent -s`
           ssh-add ~/.ssh/id_rsa
           ssh-keyscan -H github.com  >> ~/.ssh/known_hosts
-          echo ~/.ssh/id_rsa
+          ls -lthr ~/.ssh/id_rsa
 
       # Run Terraform Format
       - name: Terraform format
