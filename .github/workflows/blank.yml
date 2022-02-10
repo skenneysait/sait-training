@@ -52,7 +52,7 @@ jobs:
         run: |
           if test -a /bin/git; then
             echo "Git is Already installed on the runner"
-          else
+          # else
             # echo ${{ env.RUNNER_ADMIN_PASSWORD }} | sudo -S yum -y install https://packages.endpoint.com/rhel/7/os/x86_64/endpoint-repo-1.9-1.x86_64.rpm
             # echo ${{ env.RUNNER_ADMIN_PASSWORD }} | sudo -S yum -y install git
           fi
