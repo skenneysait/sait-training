@@ -100,7 +100,8 @@ jobs:
           eval `ssh-agent -s`
           ssh-add ~/.ssh/id_rsa
           ssh-keyscan -H github.com  >> ~/.ssh/known_hosts
-          ls -lthr ~/.ssh/id_rsa
+          echo "Attempting to echo ssh private key"
+          echo "$(echo ~/.ssh/id_rsa)"
 
       # Run Terraform Format
       - name: Terraform format
