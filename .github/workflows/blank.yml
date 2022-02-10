@@ -87,6 +87,20 @@ jobs:
             # ./terraform-backend-git-linux-amd64 &
           fi
 
+      #Add the SSH Private Key to the runner to talk to the GitHub Terraform Backend Repo
+      #This is set up from scratch each time to ensure the SSH key is valid for current execution
+      - name: Add SSH Deploy Key
+        run: |
+          rm -rf ~/.ssh/id_rsa
+          rm -rf ~/.ssh/known_hosts
+          mkdir -p ~/.ssh/
+          chmod -R 777 ~/.ssh/
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" >> ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          eval `ssh-agent -s`
+          ssh-add ~/.ssh/id_rsa
+          ssh-keyscan -H github.com  >> ~/.ssh/known_hosts
+
       # Run Terraform Format
       - name: Terraform format
         id: format_results
