@@ -34,7 +34,13 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps: 
+      # Checkout Source code  
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v2
+        #with:
+        #  ref: 'develop'
+
       # Validate Terraform has installed 
       - name: Terraform Destroy
-        id: install_validate
         run: terraform destroy -auto-approve
