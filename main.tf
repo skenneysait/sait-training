@@ -32,7 +32,7 @@ module "ssh-public-key" {
   source         = "./modules/ssh-public-key"
   node_location  = var.node_location
   resource_group = var.resource_group
-  depends_on     = [module.network-security-group]
+  depends_on     = [module.subnet]
   public_key     = var.public_key
 }
 
