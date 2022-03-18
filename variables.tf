@@ -23,3 +23,31 @@ variable "node_location" {
 variable "resource_group" {
   type = string
 }
+
+variable "environment" {
+  type = string
+}
+
+variable "organization" {
+  type = string
+}
+
+variable "landscape" {
+  type = string
+}
+
+variable "release" {
+  type = string
+}
+
+variable "usage" {
+  type = string
+}
+
+variable "instance" {
+  type = string
+}
+
+variable "application" {
+  type = string
+}

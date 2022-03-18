@@ -1,19 +1,17 @@
 # Create a resource group if it doesn't exist
-resource "azurerm_resource_group" "myterraformgroup" {
-  name     = var.resource_group
-  location = var.node_location
-
-  tags = {
-    environment = "Terraform Demo"
-  }
+module "resource-group" {
+  source         = "./modules/resource-group"
+  node_location  = var.node_location
+  resource_group = var.resource_group
 }
 
 # Create virtual network
-# resource "azurerm_virtual_network" "myterraformnetwork" {
-#   name                = "myVnet"
-#   address_space       = ["10.0.0.0/16"]
-#   location            = var.node_location
-#   resource_group_name = var.resource_group
+module "virtual-network" {
+  source         = "./modules/virtual-network"
+  node_location  = var.node_location
+  resource_group = var.resource_group
+  depends_on     = [module.resource-group]
+}
 
 #   tags = {
 #     environment = "Terraform Demo"
