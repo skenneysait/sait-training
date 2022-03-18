@@ -56,6 +56,14 @@ module "test" {
   ansible_pass   = var.ansible_pass
 }
 
+resource "null_resource" "previous" {}
+
+resource "time_sleep" "wait_30_seconds" {
+  depends_on = [null_resource.previous]
+
+  create_duration = "45s"
+}
+
 # Create Ansible inventory file
 resource "local_file" "AnsibleInventory" {
   content = templatefile("ansible/inventory.tmpl",
@@ -75,5 +83,5 @@ resource "null_resource" "run-ansible" {
   provisioner "local-exec" {
     command = "ansible-playbook -i ansible/inventory ansible/playbook.yml"
   }
-  depends_on = [module.test]
+  depends_on = [module.test, time_sleep.wait_30_seconds]
 }
