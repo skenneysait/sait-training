@@ -1,12 +1,17 @@
+# Create a resource group if it doesn't exist
+resource "azurerm_resource_group" "myterraformgroup" {
+  name     = var.resource_group
+  location = var.node_location
+
+  tags = {
+    environment = "Terraform Demo"
+  }
+}
+
 data "azurerm_subnet" "myterraformsubnet" {
   name                 = "default"
   virtual_network_name = "TF-ResourceGroup-vnet"
-  resource_group_name  = "TF-ResourceGroup"
-}
-
-data "azurerm_storage_account" "myterraformstorageaccount" {
-  name                = "tfstorageaccount161"
-  resource_group_name = "TF-ResourceGroup"
+  resource_group_name  = var.resource_group
 }
 
 output "subnet_id" {
@@ -15,8 +20,8 @@ output "subnet_id" {
 
 resource "azurerm_public_ip" "myterraformpublicip" {
   name                = "TF-VM2-IP"
-  location            = "Canada Central"
-  resource_group_name = "TF-ResourceGroup"
+  location            = var.node_location
+  resource_group_name = var.resource_group
   allocation_method   = "Dynamic"
 
   tags = {
@@ -26,8 +31,8 @@ resource "azurerm_public_ip" "myterraformpublicip" {
 
 resource "azurerm_network_interface" "myterraformnic" {
   name                = "TF-VM2-NIC"
-  location            = "Canada Central"
-  resource_group_name = "TF-ResourceGroup"
+  location            = var.node_location
+  resource_group_name = var.resource_group
 
   ip_configuration {
     name                          = "myNicConfiguration"
@@ -43,8 +48,8 @@ resource "azurerm_network_interface" "myterraformnic" {
 
 resource "azurerm_linux_virtual_machine" "myterraformvm" {
   name                            = "TF-VM2"
-  location                        = "Canada Central"
-  resource_group_name             = "TF-ResourceGroup"
+  location                        = var.node_location
+  resource_group_name             = var.resource_group
   network_interface_ids           = [azurerm_network_interface.myterraformnic.id]
   size                            = "Standard_DS1_v2"
   computer_name                   = "TF-VM2"
@@ -65,10 +70,6 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
     version   = "latest"
   }
 
-  boot_diagnostics {
-    storage_account_uri = data.azurerm_storage_account.myterraformstorageaccount.primary_blob_endpoint
-  }
-
   tags = {
     environment = "Terraform Demo"
   }
@@ -76,7 +77,7 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
 
 data "azurerm_public_ip" "myterraformpublicip" {
   name                = azurerm_public_ip.myterraformpublicip.name
-  resource_group_name = "TF-ResourceGroup"
+  resource_group_name = var.resource_group
   depends_on          = [azurerm_linux_virtual_machine.myterraformvm]
 }
 
