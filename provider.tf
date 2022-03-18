@@ -29,6 +29,5 @@ terraform {
     storage_account_name = "tfstorageaccountskenney"
     container_name       = "tfstate"
     key                  = "prod.terraform.tfstate"
-    access_key           = var.azure_access_key
   }
 }

@@ -10,5 +10,3 @@ variable "ansible_user" {
 }
 variable "ansible_pass" {
 }
-variable "azure_access_key" {
-}
