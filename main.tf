@@ -75,5 +75,5 @@ resource "null_resource" "run-ansible" {
   provisioner "local-exec" {
     command = "ansible-playbook -i ansible/inventory ansible/playbook.yml"
   }
-  depends_on = [module.test, time_sleep.wait_30_seconds]
+  depends_on = [module.test]
 }
