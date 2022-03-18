@@ -13,11 +13,6 @@ module "virtual-network" {
   depends_on     = [module.resource-group]
 }
 
-#   tags = {
-#     environment = "Terraform Demo"
-#   }
-# }
-
 # Create subnet
 # resource "azurerm_subnet" "myterraformsubnet" {
 #   name                 = "mySubnet"

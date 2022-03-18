@@ -59,34 +59,34 @@ jobs:
           fi
 
       # Install Go for the GitHub Terraform Backend
-      - name: Install GO on Runner
-        id: golang-install
-        run: |
-          if test -a /usr/local/bin/go/bin/go; then
-            echo "GO is Already installed on the runner"
-          else
-            wget https://golang.org/dl/go1.17.1.linux-amd64.tar.gz
-            sudo -S tar -C /usr/local/bin -xzf go1.17.1.linux-amd64.tar.gz
-            echo 'export PATH=/usr/local/bin/go/bin:$PATH' >>~/.bash_profile
-            source $HOME/.bash_profile
-          fi
+      # - name: Install GO on Runner
+      #   id: golang-install
+      #   run: |
+      #     if test -a /usr/local/bin/go/bin/go; then
+      #       echo "GO is Already installed on the runner"
+      #     else
+      #       wget https://golang.org/dl/go1.17.1.linux-amd64.tar.gz
+      #       sudo -S tar -C /usr/local/bin -xzf go1.17.1.linux-amd64.tar.gz
+      #       echo 'export PATH=/usr/local/bin/go/bin:$PATH' >>~/.bash_profile
+      #       source $HOME/.bash_profile
+      #     fi
 
       # Initialize GO binary for the GitHub Terraform Backend
-      - name: GitHub Terraform Backend
-        id: gh_tfm_remote
-        run: |
-          if test -a ~/actions-runner/github-backend/terraform-backend-git-linux-amd64; then
-            echo "Git Hub Backend program already exists on the Runner"
-            cd ~/actions-runner/github-backend/
-            ./github-backend/terraform-backend-git-linux-amd64 &
-          else
-            mkdir ~/actions-runner/github-backend && cd ~/actions-runner/github-backend
-            export GOPATH=${PWD}
-            echo $GOPATH is Go Path
-            wget https://github.com/plumber-cd/terraform-backend-git/releases/download/v0.0.16/terraform-backend-git-linux-amd64
-            chmod +x terraform-backend-git-linux-amd64
-            ./terraform-backend-git-linux-amd64 &
-          fi
+      # - name: GitHub Terraform Backend
+      #   id: gh_tfm_remote
+      #   run: |
+      #     if test -a ~/actions-runner/github-backend/terraform-backend-git-linux-amd64; then
+      #       echo "Git Hub Backend program already exists on the Runner"
+      #       cd ~/actions-runner/github-backend/
+      #       ./github-backend/terraform-backend-git-linux-amd64 &
+      #     else
+      #       mkdir ~/actions-runner/github-backend && cd ~/actions-runner/github-backend
+      #       export GOPATH=${PWD}
+      #       echo $GOPATH is Go Path
+      #       wget https://github.com/plumber-cd/terraform-backend-git/releases/download/v0.0.16/terraform-backend-git-linux-amd64
+      #       chmod +x terraform-backend-git-linux-amd64
+      #       ./terraform-backend-git-linux-amd64 &
+      #     fi
 
       #Add the SSH Private Key to the runner to talk to the GitHub Terraform Backend Repo
       #This is set up from scratch each time to ensure the SSH key is valid for current execution
@@ -119,7 +119,8 @@ jobs:
       - name: Terraform init
         id: tfm_init
         run: |
-          terraform init
+          terraform init \
+            -backend-config="access_key=${{ secrets.AZURE_ACCESS_KEY }}"
 
       # Run Terraform Validate
       - name: Terraform validate
