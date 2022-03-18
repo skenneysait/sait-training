@@ -9,124 +9,124 @@ resource "azurerm_resource_group" "myterraformgroup" {
 }
 
 # Create virtual network
-resource "azurerm_virtual_network" "myterraformnetwork" {
-  name                = "myVnet"
-  address_space       = ["10.0.0.0/16"]
-  location            = var.node_location
-  resource_group_name = var.resource_group
+# resource "azurerm_virtual_network" "myterraformnetwork" {
+#   name                = "myVnet"
+#   address_space       = ["10.0.0.0/16"]
+#   location            = var.node_location
+#   resource_group_name = var.resource_group
 
-  tags = {
-    environment = "Terraform Demo"
-  }
-}
+#   tags = {
+#     environment = "Terraform Demo"
+#   }
+# }
 
 # Create subnet
-resource "azurerm_subnet" "myterraformsubnet" {
-  name                 = "mySubnet"
-  resource_group_name  = var.resource_group
-  virtual_network_name = "myVnet"
-  address_prefixes     = ["10.0.1.0/24"]
-}
+# resource "azurerm_subnet" "myterraformsubnet" {
+#   name                 = "mySubnet"
+#   resource_group_name  = var.resource_group
+#   virtual_network_name = "myVnet"
+#   address_prefixes     = ["10.0.1.0/24"]
+# }
 
 output "subnet_id" {
-  value = data.azurerm_subnet.myterraformsubnet.id
-}
+#   value = data.azurerm_subnet.myterraformsubnet.id
+# }
 
-resource "azurerm_public_ip" "myterraformpublicip" {
-  name                = "TF-VM2-IP"
-  location            = var.node_location
-  resource_group_name = var.resource_group
-  allocation_method   = "Dynamic"
+# resource "azurerm_public_ip" "myterraformpublicip" {
+#   name                = "TF-VM2-IP"
+#   location            = var.node_location
+#   resource_group_name = var.resource_group
+#   allocation_method   = "Dynamic"
 
-  tags = {
-    environment = "Terraform Demo"
-  }
-}
+#   tags = {
+#     environment = "Terraform Demo"
+#   }
+# }
 
-resource "azurerm_network_interface" "myterraformnic" {
-  name                = "TF-VM2-NIC"
-  location            = var.node_location
-  resource_group_name = var.resource_group
+# resource "azurerm_network_interface" "myterraformnic" {
+#   name                = "TF-VM2-NIC"
+#   location            = var.node_location
+#   resource_group_name = var.resource_group
 
-  ip_configuration {
-    name                          = "myNicConfiguration"
-    subnet_id                     = data.azurerm_subnet.myterraformsubnet.id
-    private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.myterraformpublicip.id
-  }
+#   ip_configuration {
+#     name                          = "myNicConfiguration"
+#     subnet_id                     = data.azurerm_subnet.myterraformsubnet.id
+#     private_ip_address_allocation = "Dynamic"
+#     public_ip_address_id          = azurerm_public_ip.myterraformpublicip.id
+#   }
 
-  tags = {
-    environment = "Terraform Demo"
-  }
-}
+#   tags = {
+#     environment = "Terraform Demo"
+#   }
+# }
 
-resource "azurerm_linux_virtual_machine" "myterraformvm" {
-  name                            = "TF-VM2"
-  location                        = var.node_location
-  resource_group_name             = var.resource_group
-  network_interface_ids           = [azurerm_network_interface.myterraformnic.id]
-  size                            = "Standard_DS1_v2"
-  computer_name                   = "TF-VM2"
-  disable_password_authentication = "false"
-  admin_username                  = var.ansible_user
-  admin_password                  = var.ansible_pass
+# resource "azurerm_linux_virtual_machine" "myterraformvm" {
+#   name                            = "TF-VM2"
+#   location                        = var.node_location
+#   resource_group_name             = var.resource_group
+#   network_interface_ids           = [azurerm_network_interface.myterraformnic.id]
+#   size                            = "Standard_DS1_v2"
+#   computer_name                   = "TF-VM2"
+#   disable_password_authentication = "false"
+#   admin_username                  = var.ansible_user
+#   admin_password                  = var.ansible_pass
 
-  os_disk {
-    name                 = "TF-VM2-OsDisk"
-    caching              = "ReadWrite"
-    storage_account_type = "Premium_LRS"
-  }
+#   os_disk {
+#     name                 = "TF-VM2-OsDisk"
+#     caching              = "ReadWrite"
+#     storage_account_type = "Premium_LRS"
+#   }
 
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
-  }
+#   source_image_reference {
+#     publisher = "Canonical"
+#     offer     = "UbuntuServer"
+#     sku       = "18.04-LTS"
+#     version   = "latest"
+#   }
 
-  tags = {
-    environment = "Terraform Demo"
-  }
-}
+#   tags = {
+#     environment = "Terraform Demo"
+#   }
+# }
 
-data "azurerm_public_ip" "myterraformpublicip" {
-  name                = azurerm_public_ip.myterraformpublicip.name
-  resource_group_name = var.resource_group
-  depends_on          = [azurerm_linux_virtual_machine.myterraformvm]
-}
+# data "azurerm_public_ip" "myterraformpublicip" {
+#   name                = azurerm_public_ip.myterraformpublicip.name
+#   resource_group_name = var.resource_group
+#   depends_on          = [azurerm_linux_virtual_machine.myterraformvm]
+# }
 
-output "public_ip_address" {
-  value      = data.azurerm_public_ip.myterraformpublicip.ip_address
-  depends_on = [azurerm_linux_virtual_machine.myterraformvm]
-}
+# output "public_ip_address" {
+#   value      = data.azurerm_public_ip.myterraformpublicip.ip_address
+#   depends_on = [azurerm_linux_virtual_machine.myterraformvm]
+# }
 
-resource "null_resource" "previous" {}
+# resource "null_resource" "previous" {}
 
-resource "time_sleep" "wait_30_seconds" {
-  depends_on = [null_resource.previous]
+# resource "time_sleep" "wait_30_seconds" {
+#   depends_on = [null_resource.previous]
 
-  create_duration = "45s"
-}
+#   create_duration = "45s"
+# }
 
 ### The Ansible inventory file
-resource "local_file" "AnsibleInventory" {
-  content = templatefile("ansible/inventory.tmpl",
-    {
-      ansible-pass  = var.ansible_pass
-      ansible-user  = var.ansible_user
-      myterraformvm = data.azurerm_public_ip.myterraformpublicip.ip_address
-    }
-  )
-  filename   = "ansible/inventory"
-  depends_on = [azurerm_linux_virtual_machine.myterraformvm]
-}
+# resource "local_file" "AnsibleInventory" {
+#   content = templatefile("ansible/inventory.tmpl",
+#     {
+#       ansible-pass  = var.ansible_pass
+#       ansible-user  = var.ansible_user
+#       myterraformvm = data.azurerm_public_ip.myterraformpublicip.ip_address
+#     }
+#   )
+#   filename   = "ansible/inventory"
+#   depends_on = [azurerm_linux_virtual_machine.myterraformvm]
+# }
 
-resource "null_resource" "run-ansible" {
-  triggers = {
-    always_run = timestamp()
-  }
-  provisioner "local-exec" {
-    command = "ansible-playbook -i ansible/inventory ansible/playbook.yml"
-  }
-  depends_on = [azurerm_linux_virtual_machine.myterraformvm, time_sleep.wait_30_seconds]
-}
+# resource "null_resource" "run-ansible" {
+#   triggers = {
+#     always_run = timestamp()
+#   }
+#   provisioner "local-exec" {
+#     command = "ansible-playbook -i ansible/inventory ansible/playbook.yml"
+#   }
+#   depends_on = [azurerm_linux_virtual_machine.myterraformvm, time_sleep.wait_30_seconds]
+# }
