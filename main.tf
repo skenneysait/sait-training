@@ -62,7 +62,7 @@ resource "local_file" "AnsibleInventory" {
     {
       ansible-pass = var.ansible_pass
       ansible-user = var.ansible_user
-      test    = module.test.linux_public_ip
+      test         = module.test.linux_public_ip
     }
   )
   filename = "ansible/inventory"
