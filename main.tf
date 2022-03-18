@@ -28,7 +28,7 @@ resource "azurerm_resource_group" "myterraformgroup" {
 #   address_prefixes     = ["10.0.1.0/24"]
 # }
 
-output "subnet_id" {
+# output "subnet_id" {
 #   value = data.azurerm_subnet.myterraformsubnet.id
 # }
 
