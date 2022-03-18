@@ -8,10 +8,24 @@ resource "azurerm_resource_group" "myterraformgroup" {
   }
 }
 
-data "azurerm_subnet" "myterraformsubnet" {
-  name                 = "default"
-  virtual_network_name = "TF-ResourceGroup-vnet"
+# Create virtual network
+resource "azurerm_virtual_network" "myterraformnetwork" {
+  name                = "myVnet"
+  address_space       = ["10.0.0.0/16"]
+  location            = var.node_location
+  resource_group_name = var.resource_group
+
+  tags = {
+    environment = "Terraform Demo"
+  }
+}
+
+# Create subnet
+resource "azurerm_subnet" "myterraformsubnet" {
+  name                 = "mySubnet"
   resource_group_name  = var.resource_group
+  virtual_network_name = "myVnet"
+  address_prefixes     = ["10.0.1.0/24"]
 }
 
 output "subnet_id" {
