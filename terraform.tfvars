@@ -1,2 +1,2 @@
-node_location    = "Canada Central"
-resource_group   = "sait-training-RG"
+node_location  = "Canada Central"
+resource_group = "sait-training-RG"
