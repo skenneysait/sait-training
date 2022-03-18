@@ -7,4 +7,4 @@ release        = "non"
 usage          = "sbx"
 instance       = "1"
 application    = "tst"
-test_instances = 1
+test_instances = 2
