@@ -24,6 +24,10 @@ variable "resource_group" {
   type = string
 }
 
+variable "public_key" {
+  type = string
+}
+
 variable "environment" {
   type = string
 }
