@@ -68,12 +68,12 @@ resource "local_file" "AnsibleInventory" {
   filename = "ansible/inventory"
 }
 
-# resource "null_resource" "run-ansible" {
-#   triggers = {
-#     always_run = timestamp()
-#   }
-#   provisioner "local-exec" {
-#     command = "ansible-playbook -i ansible/inventory ansible/playbook.yml"
-#   }
-#   depends_on = [azurerm_linux_virtual_machine.myterraformvm, time_sleep.wait_30_seconds]
-# }
+resource "null_resource" "run-ansible" {
+  triggers = {
+    always_run = timestamp()
+  }
+  provisioner "local-exec" {
+    command = "ansible-playbook -i ansible/inventory ansible/playbook.yml"
+  }
+  depends_on = [azurerm_linux_virtual_machine.myterraformvm, time_sleep.wait_30_seconds]
+}
