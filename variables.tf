@@ -51,3 +51,6 @@ variable "instance" {
 variable "application" {
   type = string
 }
+
+variable "test_instances" {
+}
