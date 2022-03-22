@@ -1,0 +1,4 @@
+---
+# defaults file for openjdk
+java_version: openjdk8
+dir: /u01
