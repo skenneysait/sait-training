@@ -16,7 +16,7 @@
 - name: Extract "{{ java[java_version] }} into {{ dir }}"
   ansible.builtin.unarchive:
     src: "/opt/{{ java[java_version].file_name }}"
-    dest: "{{ dir }}
+    dest: "{{ dir }}"
     remote_src: yes
 
 # - name: Create a symbolic link
