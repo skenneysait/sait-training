@@ -13,14 +13,14 @@
     state: directory
     mode: 0755
 
-- name: Extract "{{ java[java_version] }} into {{ dir }}/{{ java[java_version].path }}"
+- name: Extract "{{ java[java_version] }} into {{ dir }}"
   ansible.builtin.unarchive:
     src: "/opt/{{ java[java_version].file_name }}"
-    dest: "{{ dir }}/{{ java[java_version].path }}"
+    dest: "{{ dir }}
     remote_src: yes
 
-- name: Create a symbolic link
-  ansible.builtin.file:
-    src: "{{ dir }}/{{ java[java_version].path }}"
-    dest: "{{ dir }}/jdk"
-    state: link
+# - name: Create a symbolic link
+#   ansible.builtin.file:
+#     src: "{{ dir }}/{{ java[java_version].path }}"
+#     dest: "{{ dir }}/jdk"
+#     state: link
