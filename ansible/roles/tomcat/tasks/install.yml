@@ -1,0 +1,40 @@
+---
+# tasks file for tomcat
+- name: Download Tomcat using get_url
+  get_url:
+    url: "https://downloads.apache.org/tomcat/tomcat-8/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz"
+    dest: "{{ DEVOPS_DIR_PKG }}/apache/tomcat/apache-tomcat-{{ tomcat_version }}.tar.gz"
+    mode: 0755
+
+- name: Extract "apache-tomcat-{{ tomcat_version }}.tar.gz into {{ dir }}/{{ tomcat_version }}"
+  ansible.builtin.unarchive:
+    src: "{{ DEVOPS_DIR_PKG }}/apache/tomcat/apache-tomcat-{{ tomcat_version }}.tar.gz"
+    dest: "{{ item.dir_path }}"
+    remote_src: yes
+  loop: "{{ dir_list }}"
+
+- name: Copy a new "server.xml" file to  "server.xml.original"
+  ansible.builtin.copy:
+    src: "{{ item.dir_path }}/apache-tomcat-{{ tomcat_version }}/conf/server.xml"
+    dest: "{{ item.dir_path }}/apache-tomcat-{{ tomcat_version }}/conf/server.xml.original"
+    remote_src: yes
+  loop: "{{ dir_list }}"
+
+- name: Remove default example
+  ansible.builtin.file:
+    path: "{{ item.dir_path }}/apache-tomcat-{{ tomcat_version }}/examples"
+    state: absent
+  loop: "{{ dir_list }}"  
+   
+- name: Remove default docs
+  ansible.builtin.file:
+    path: "{{ item.dir_path }}/apache-tomcat-{{ tomcat_version }}/docs"
+    state: absent
+  loop: "{{ dir_list }}"  
+
+- name: Create a symbolic link
+  ansible.builtin.file:
+    src: "{{ item.dir_path }}/apache-tomcat-{{ tomcat_version }}"
+    dest: "{{ item.dir_path }}/apache-tomcat"
+    state: link
+  loop: "{{ dir_list }}"

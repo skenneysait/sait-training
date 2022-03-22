@@ -1,0 +1,42 @@
+---
+- name: Template setenv.sh and copy to respective instance
+  ansible.builtin.template:
+    src: setenv.sh.j2
+    dest: "{{ item.dir_path }}/apache-tomcat-{{ tomcat_version }}/bin/setenv.sh"
+  loop: "{{ dir_list }}"
+
+- name: Copy context.xml
+  ansible.builtin.template:
+    src: "{{ item.contextxml }}"
+    dest: "{{ item.dir_path }}/apache-tomcat-{{ tomcat_version }}/conf/context.xml"
+  loop: "{{ dir_list }}"
+
+- name: Copy server.xml
+  ansible.builtin.template:
+    src: "{{ item.serverxml }}"
+    dest: "{{ item.dir_path }}/apache-tomcat-{{ tomcat_version }}/conf/server.xml"
+  loop: "{{ dir_list }}"
+
+- name: Copy tomcat-users.xml
+  ansible.builtin.template:
+    src: "tomcat-users.xml.j2"
+    dest: "{{ item.dir_path }}/apache-tomcat-{{ tomcat_version }}/conf/tomcat-users.xml"
+  loop: "{{ dir_list }}"
+
+- name: Copy jar drivers ojdbc8.jar
+  ansible.builtin.copy:
+    src: ojdbc8.jar
+    dest: "{{ item.dir_path }}/apache-tomcat-{{ tomcat_version }}/lib/"
+  loop: "{{ dir_list }}"
+
+- name: Copy jar drivers xdb6.jar
+  ansible.builtin.copy:
+    src: xdb6.jar
+    dest: "{{ item.dir_path }}/apache-tomcat-{{ tomcat_version }}/lib/"
+  loop: "{{ dir_list }}"
+
+- name: Copy jar drivers ucp.jar
+  ansible.builtin.copy:
+    src: ucp.jar
+    dest: "{{ item.dir_path }}/apache-tomcat-{{ tomcat_version }}/lib/"
+  loop: "{{ dir_list }}"

@@ -1,0 +1,11 @@
+dir_list:
+  - { dir_path: '/u01/app/tomcat1', serverxml: '{{instance_type}}/server.xml.1.j2', contextxml: '{{instance_type}}/context.xml.1.j2', jmx_port: 9190 }
+  - { dir_path: '/u01/app/tomcat3', serverxml: '{{instance_type}}/server.xml.3.j2', contextxml: '{{instance_type}}/context.xml.3.j2', jmx_port: 9390 }
+  - { dir_path: '/u01/app/tomcat5', serverxml: '{{instance_type}}/server.xml.5.j2', contextxml: '{{instance_type}}/context.xml.5.j2', jmx_port: 9590 }
+c_database_name: S0SAITC
+vm_domain: "{{ ansible_domain }}"
+database_connection: "{{c_database_name}}.{{vm_domain}}/{{c_database_name}}"
+banproxy_password: bAnPaSsW0rd
+ban_ss_password: bAnSSPaSsW0rd
+www_t2202a_password: WwWpAsSw0rd
+commmgr_password: cOmMGrPaSsW0rd

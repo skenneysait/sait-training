@@ -1,0 +1,7 @@
+---
+# tasks file for tomcat
+- include_vars: "{{ instance_type }}-vars.yml"
+- include_tasks: setup.yml
+- include_tasks: install.yml
+- include_tasks: config.yml
+
