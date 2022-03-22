@@ -28,5 +28,5 @@
 - name: Modify securerandom in security.java file
   ansible.builtin.lineinfile:
     path: /u01/jdk/jre/lib/security/java.security
-    regexp: "^securerandom\.source"
+    regexp: "^securerandom.source"
     line: securerandom.source=file:/dev/./random
