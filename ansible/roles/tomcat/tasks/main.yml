@@ -47,3 +47,5 @@
     src: "{{ DEVOPS_DIR_PKG }}/apache/tomcat/apache-tomcat-{{ tomcat_version }}.tar.gz"
     dest: "{{ dir }}/apache-tomcat-{{ tomcat_version }}"
     remote_src: yes
+    owner: "oracle"
+    group: "oracle"
