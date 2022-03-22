@@ -7,4 +7,4 @@ tcadmin_user: tcadmin
 tcadmin_password: Secret-Password123
 tomcat_version: 8.5.77
 number_instances: 2
-dir: "/u01/app/tomcat{{ number_instances }}"
+dir: "/u01/app/tomcat1"

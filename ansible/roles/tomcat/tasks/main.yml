@@ -1,7 +1,35 @@
 ---
 # tasks file for tomcat
-- include_vars: "{{ instance_type }}-vars.yml"
-- include_tasks: setup.yml
-- include_tasks: install.yml
-- include_tasks: config.yml
+# - include_vars: "{{ instance_type }}-vars.yml"
+# - include_tasks: setup.yml
+# - include_tasks: install.yml
+# - include_tasks: config.yml
 
+- name: Ensure group 'oracle' exists
+  ansible.builtin.group:
+    name: "{{ user }}"
+    gid: 4001
+    state: present
+
+- name: Add the user 'oracle' to primary group of 'oracle'
+  ansible.builtin.user:
+    name: "{{ user }}"
+    comment: This is the "{{ user }}" user
+    uid: 4001
+    group: "{{ group }}"
+
+- name: Create a Directory "{{ DEVOPS_DIR_PKG }}/apache/tomcat/{{ tomcat_version }}"
+  file:
+    path: "{{ DEVOPS_DIR_PKG }}/apache/tomcat/{{ tomcat_version }}"
+    state: directory
+    mode: 0755
+    owner:  "{{ user }}"
+    group: "{{ group }}"
+
+- name: Create a Directory "{{ dir }}/apache-tomcat-{{ tomcat_version }}"
+  file:
+    path: "{{ dir }}/apache-tomcat-{{ tomcat_version }}"
+    state: directory
+    mode: 0755
+    owner:  "{{ user }}"
+    group: "{{ group }}"
