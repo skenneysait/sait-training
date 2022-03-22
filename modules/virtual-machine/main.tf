@@ -69,19 +69,19 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
     storage_account_type = "Premium_LRS"
   }
 
-  # source_image_reference {
-  #   publisher = "RedHat"
-  #   offer     = "RHEL-SAP-HA"
-  #   sku       = "7_9"
-  #   version   = "7.9.2021051501"
-  # }
-
   source_image_reference {
-    publisher = "Canonical"
-    offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
-    version   = "latest"
+    publisher = "RedHat"
+    offer     = "RHEL-SAP-HA"
+    sku       = "7_9"
+    version   = "7.9.2021051501"
   }
+
+  # source_image_reference {
+  #   publisher = "Canonical"
+  #   offer     = "UbuntuServer"
+  #   sku       = "18.04-LTS"
+  #   version   = "latest"
+  # }
 
   computer_name                   = "${var.organization}-${var.landscape}-${var.release}-${var.usage}${var.instance}-${var.application}-${var.apphosttype}-vm${count.index + 1}"
   admin_username                  = var.ansible_user
