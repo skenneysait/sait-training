@@ -39,6 +39,8 @@
     url: "https://downloads.apache.org/tomcat/tomcat-8/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz"
     dest: "{{ DEVOPS_DIR_PKG }}/apache/tomcat/apache-tomcat-{{ tomcat_version }}.tar.gz"
     mode: 0755
+    owner: "oracle"
+    group: "oracle"
 
 - name: Extract "apache-tomcat-{{ tomcat_version }}.tar.gz into {{ dir }}/{{ tomcat_version }}"
   ansible.builtin.unarchive:
