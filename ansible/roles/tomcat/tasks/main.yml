@@ -26,9 +26,9 @@
     owner:  "{{ user }}"
     group: "{{ group }}"
 
-- name: Create a Directory "{{ dir }}/apache-tomcat-{{ tomcat_version }}"
+- name: Create a Directory "{{ dir }}"
   file:
-    path: "{{ dir }}/apache-tomcat-{{ tomcat_version }}"
+    path: "{{ dir }}"
     state: directory
     mode: 0755
     owner:  "{{ user }}"
@@ -45,7 +45,7 @@
 - name: Extract "apache-tomcat-{{ tomcat_version }}.tar.gz into {{ dir }}/{{ tomcat_version }}"
   ansible.builtin.unarchive:
     src: "{{ DEVOPS_DIR_PKG }}/apache/tomcat/apache-tomcat-{{ tomcat_version }}.tar.gz"
-    dest: "{{ dir }}/apache-tomcat-{{ tomcat_version }}"
+    dest: "{{ dir }}"
     remote_src: yes
     owner: "oracle"
     group: "oracle"
