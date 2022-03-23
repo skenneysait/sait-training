@@ -77,7 +77,7 @@
     owner: "oracle"
     group: "oracle"
 
-  - name: Download Extensibility war file
+- name: Download Extensibility war file
   get_url:
     url: "https://sait-sust-prd-prd1-ban-ss-ssag4.sait.ca/images/stock/BannerExtensibility.war"
     dest: "{{ dir }}/apache-tomcat/webapps/BannerExtensibility.war"
