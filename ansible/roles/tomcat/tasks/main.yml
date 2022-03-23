@@ -62,3 +62,9 @@
     dest: "{{ dir }}/apache-tomcat-{{ tomcat_version }}/bin/setenv.sh"
     owner: "oracle"
     group: "oracle"
+
+- name: Open port 8080 inside firewalld
+  ansible.builtin.command: firewall-cmd --permanent --zone=public --add-port=8080/tcp
+
+- name: Reload firewalld
+  ansible.builtin.command: systemctl reload firewalld
