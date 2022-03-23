@@ -1,11 +1,5 @@
 export PATH=.:/u01/jdk:$PATH
 export JAVA_HOME=/u01/jdk
-export CATALINA_HOME={{item.dir_path}}/apache-tomcat
+export CATALINA_HOME={{dir}/apache-tomcat
 export CATALINA_OPTS="-server -Xms2g -Xmx6g -XX:MaxMetaspaceSize=1g"
-export JAVA_OPTS="-Doracle.jdbc.autoCommitSpecCompliant=false \
-                  -Dcom.sun.management.jmxremote=true \
-                  -Dcom.sun.management.jmxremote.port={{item.jmx_port}} \
-                  -Dcom.sun.management.jmxremote.ssl=false \
-                  -Dcom.sun.management.jmxremote.authenticate=true \
-                  -Dcom.sun.management.jmxremote.access.file={{item.dir_path}}/apache-tomcat/conf/jmxremote.access \
-                  -Dcom.sun.management.jmxremote.password.file={{item.dir_path}}/apache-tomcat/conf/jmxremote.password"
+export JAVA_OPTS="-Doracle.jdbc.autoCommitSpecCompliant=false
