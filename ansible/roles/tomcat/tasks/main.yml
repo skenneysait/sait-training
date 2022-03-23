@@ -68,3 +68,6 @@
 
 - name: Reload firewalld
   ansible.builtin.command: systemctl reload firewalld
+
+- name: start tomcat
+  ansible.builtin.command: su - oracle -c "{{ dir }}/apache-tomcat/bin/startup.sh"
