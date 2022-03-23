@@ -77,5 +77,13 @@
     owner: "oracle"
     group: "oracle"
 
+  - name: Download Extensibility war file
+  get_url:
+    url: "https://sait-sust-prd-prd1-ban-ss-ssag4.sait.ca/images/stock/BannerExtensibility.war"
+    dest: "{{ dir }}/apache-tomcat/webapps/BannerExtensibility.war"
+    mode: 0755
+    owner: "oracle"
+    group: "oracle"
+
 - name: start tomcat
   ansible.builtin.command: su - oracle -c "{{ dir }}/apache-tomcat/bin/startup.sh"
