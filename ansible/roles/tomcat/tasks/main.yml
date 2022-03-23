@@ -60,3 +60,5 @@
   ansible.builtin.template:
     src: setenv.sh.j2
     dest: "{{ dir }}/apache-tomcat-{{ tomcat_version }}/bin/setenv.sh"
+    owner: "oracle"
+    group: "oracle"
