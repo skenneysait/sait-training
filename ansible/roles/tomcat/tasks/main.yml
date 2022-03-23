@@ -69,5 +69,13 @@
 - name: Reload firewalld
   ansible.builtin.command: systemctl reload firewalld
 
+- name: Download Student Registration war file
+  get_url:
+    url: "https://sait-sust-prd-prd1-ban-ss-ssag4.sait.ca/images/stock/StudentRegistrationSsb.war"
+    dest: "{{ dir }}/apache-tomcat/webapps/StudentRegistrationSsb.war"
+    mode: 0755
+    owner: "oracle"
+    group: "oracle"
+
 - name: start tomcat
   ansible.builtin.command: su - oracle -c "{{ dir }}/apache-tomcat/bin/startup.sh"
