@@ -59,4 +59,4 @@
 - name: Template setenv.sh and copy to respective instance
   ansible.builtin.template:
     src: setenv.sh.j2
-    dest: "{{ dir }}/apache-tomcat/bin/setenv.sh"
+    dest: "{{ dir }}/apache-tomcat-{{ tomcat_version }}/bin/setenv.sh"
