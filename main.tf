@@ -20,13 +20,13 @@ module "subnet" {
   depends_on     = [module.virtual-network]
 }
 
-# module "network-security-group" {
-#   source         = "./modules/network-security-group"
-#   node_location  = var.node_location
-#   resource_group = var.resource_group
-#   depends_on     = [module.subnet]
-#   subnet_id      = module.subnet.subnet_id
-# }
+module "network-security-group" {
+  source         = "./modules/network-security-group"
+  node_location  = var.node_location
+  resource_group = var.resource_group
+  depends_on     = [module.subnet]
+  subnet_id      = module.subnet.subnet_id
+}
 
 module "ssh-public-key" {
   source         = "./modules/ssh-public-key"
