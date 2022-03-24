@@ -16,6 +16,18 @@ resource "azurerm_network_security_group" "myterraformnsg" {
     destination_address_prefix = "*"
   }
 
+  security_rule {
+    name                       = "http_80"
+    priority                   = 1010
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
   tags = {
     environment = "Terraform Demo"
   }
