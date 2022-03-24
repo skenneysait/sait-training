@@ -85,5 +85,20 @@
     owner: "oracle"
     group: "oracle"
 
+- name: Copy jar drivers ojdbc8.jar
+  ansible.builtin.copy:
+    src: ojdbc8.jar
+    dest: "{{ dir }}/apache-tomcat-{{ tomcat_version }}/lib/"
+
+- name: Copy jar drivers xdb6.jar
+  ansible.builtin.copy:
+    src: xdb6.jar
+    dest: "{{ dir }}/apache-tomcat-{{ tomcat_version }}/lib/"
+
+- name: Copy jar drivers ucp.jar
+  ansible.builtin.copy:
+    src: ucp.jar
+    dest: "{{ dir }}/apache-tomcat-{{ tomcat_version }}/lib/"
+
 - name: start tomcat
   ansible.builtin.command: su - oracle -c "{{ dir }}/apache-tomcat/bin/startup.sh"
