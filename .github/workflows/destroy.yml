@@ -12,7 +12,7 @@ on:
     #  - "Pre Commit Check"
 
   schedule:
-    - cron: '30 16 * * *'
+    - cron: '30 22 * * *'
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
