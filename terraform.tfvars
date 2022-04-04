@@ -1,5 +1,5 @@
 node_location  = "Canada Central"
-resource_group = "sait-training-RG"
+resource_group = "rg-practice-sandbox-01"
 environment    = "S1SB1TST"
 organization   = "sait"
 landscape      = "prj1"

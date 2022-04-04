@@ -29,7 +29,8 @@ resource "azurerm_network_security_group" "myterraformnsg" {
   }
 
   tags = {
-    environment = "Terraform Demo"
+    BusinessUnit = "ITS"
+    Creator = "Shawn Kenney"
   }
 }
 

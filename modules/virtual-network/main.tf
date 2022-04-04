@@ -6,6 +6,7 @@ resource "azurerm_virtual_network" "myterraformnetwork" {
   resource_group_name = var.resource_group
 
   tags = {
-    environment = "Terraform Demo"
+    BusinessUnit = "ITS"
+    Creator = "Shawn Kenney"
   }
 }

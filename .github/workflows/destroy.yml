@@ -34,6 +34,10 @@ jobs:
       TF_VAR_subscription_id: ${{ secrets.SUBSCRIPTION_ID }}
       TF_VAR_tenant_id : ${{ secrets.TENANT_ID }}
       TF_VAR_public_key : ${{ secrets.SSH_PUBLIC_KEY }}
+      RESOURCE_GROUP: "rg-practice-sandbox-01"
+      STORAGE_ACCOUNT_NAME: "saterraformstatefile"
+      CONTAINER_NAME: "ctr-terraform-state-file"
+      KEY: "terraform.tfstate"
       ANSIBLE_FORCE_COLOR: '1'
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -124,6 +128,10 @@ jobs:
         id: tfm_init
         run: |
           terraform init \
+            -backend-config="resource_group_name=$RESOURCE_GROUP" \
+            -backend-config="storage_account_name=$STORAGE_ACCOUNT_NAME" \
+            -backend-config="container_name=$CONTAINER_NAME" \
+            -backend-config="key=$KEY" \
             -backend-config="access_key=${{ secrets.AZURE_ACCESS_KEY }}"
 
       # Run Terraform Validate
