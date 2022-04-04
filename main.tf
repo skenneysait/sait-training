@@ -10,7 +10,7 @@ module "virtual-network" {
   source         = "./modules/virtual-network"
   node_location  = var.node_location
   resource_group = var.resource_group
-  depends_on     = [module.resource-group]
+  # depends_on     = [module.resource-group]
 }
 
 # Create subnet
