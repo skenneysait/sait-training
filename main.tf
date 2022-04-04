@@ -1,9 +1,9 @@
 # Create a resource group if it doesn't exist
-module "resource-group" {
-  source         = "./modules/resource-group"
-  node_location  = var.node_location
-  resource_group = var.resource_group
-}
+# module "resource-group" {
+#   source         = "./modules/resource-group"
+#   node_location  = var.node_location
+#   resource_group = var.resource_group
+# }
 
 # Create virtual network
 module "virtual-network" {
